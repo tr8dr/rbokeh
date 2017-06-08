@@ -7,8 +7,13 @@
 #' p <- figure() %>% ly_points(1:10)
 #' rbokeh2html(p)
 #' @export
-rbokeh2html <- function(fig, file = tempfile(fileext = ".html"), pretty = FALSE,
-  secure = TRUE) {
+rbokeh2html <- function(
+    fig,
+    file = tempfile(fileext = ".html"),
+    pretty = FALSE,
+    url.js = sprintf("https://cdn.pydata.org/bokeh/release/bokeh-%s.min.js", get_bokeh_version()),
+    url.css = sprintf("https://cdn.pydata.org/bokeh/release/bokeh-%s.min.css", get_bokeh_version()))
+{
 
   if (is.null(fig$width))
     fig$width <- 500
@@ -29,15 +34,11 @@ rbokeh2html <- function(fig, file = tempfile(fileext = ".html"), pretty = FALSE,
     force = TRUE, POSIXt = "ISO8601", UTC = TRUE, rownames = FALSE,
     keep_vec_names = TRUE)
 
-  ver <- get_bokeh_version()
-
-  sc <- ifelse(secure, "s", "")
-
   a <- paste0("<!DOCTYPE html>
 <html>
 <head>
-<script src='http", sc, "://cdn.pydata.org/bokeh/release/bokeh-", ver, ".min.js'></script>
-<link href='http", sc, "://cdn.pydata.org/bokeh/release/bokeh-", ver, ".min.css' rel='stylesheet'>
+<script src='", url.js ,"'></script>
+<link href='", url.css,"' rel='stylesheet'>
 </head>
 <body>
 <div class='bk-root' class='plotdiv' style=' width: ",
